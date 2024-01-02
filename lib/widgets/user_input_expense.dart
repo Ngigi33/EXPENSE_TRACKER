@@ -151,7 +151,7 @@ class _InputExpenseState extends State<InputExpense> {
                       _selectedCategory = value;
                     });
 
-                    print(value);
+                    //print(value);
                   }),
             ],
           ),
@@ -163,7 +163,7 @@ class _InputExpenseState extends State<InputExpense> {
           ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
-                print("Editing Cancelled");
+                //print("Editing Cancelled");
               },
               child: const Text("CANCEL"))
         ]));

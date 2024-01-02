@@ -5,7 +5,7 @@ var kColorScheme =
     ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 5, 59, 155));
 
 var kDarkColorScheme = ColorScheme.fromSeed(
-    brightness: Brightness.dark, seedColor: Color.fromARGB(255, 4, 11, 126));
+    brightness: Brightness.dark, seedColor: const Color.fromARGB(255, 4, 11, 126));
 
 void main() {
   runApp(MaterialApp(
