@@ -2,6 +2,7 @@ import 'package:expense_tracker/models/expense_model.dart';
 //import 'package:expense_tracker/widgets/expenses.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 //import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
@@ -79,93 +80,191 @@ class _InputExpenseState extends State<InputExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.fromLTRB(
-          18,
-          52,
-          18,
-          15,
-        ),
-        child: Column(children: [
-          TextField(
-            controller: _titleController,
-            maxLength: 50,
-            decoration: const InputDecoration(label: Text("Title")),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                      prefixText: 'KES ', label: Text("Amount")),
-                ),
+    final keyBoardSpace = MediaQuery.of(context).viewInsets.bottom;
+    return LayoutBuilder(builder: (ctx, constraints) {
+      final width = constraints.maxWidth;
+      return SizedBox(
+        height: double.infinity,
+        child: SingleChildScrollView(
+          child: Padding(
+              padding: EdgeInsets.fromLTRB(
+                18,
+                16,
+                18,
+                keyBoardSpace + 16,
               ),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                  child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    _selectedDate == null
-                        ? 'Select Date'
-                        : formatter.format(_selectedDate!),
-                  ),
-                  IconButton(
-                      onPressed: _presentDatePicker,
-                      iconSize: 40,
-                      icon: const Icon(Icons.calendar_month_sharp))
-                ],
-              )),
-            ],
-          ),
-          const SizedBox(
-            height: 50,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              DropdownButton(
-                  value: _selectedCategory,
-                  items: CategoryType
-                      .values // displays all values that make up the enum
-                      .map(
-                        (category) => DropdownMenuItem(
-                          value: category,
-                          child: Text(
-                            category.name.toUpperCase(),
-                          ),
+              child: Column(children: [
+                if (width >= 600)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _titleController,
+                          maxLength: 50,
+                          decoration:
+                              const InputDecoration(label: Text("Title")),
                         ),
-                      )
-                      .toList(),
-                  onChanged: (value) {
-                    if (value == null) {
-                      return;
-                    }
+                      ),
+                      const SizedBox(width: 30,),
+                      Expanded(
+                        child: TextField(
+                          controller: _amountController,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                              prefixText: 'KES ', label: Text("Amount")),
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  TextField(
+                    controller: _titleController,
+                    maxLength: 50,
+                    decoration: const InputDecoration(label: Text("Title")),
+                  ),
+                if (width >= 600)
+                  Row(
+                    children: [
+                      DropdownButton(
+                          value: _selectedCategory,
+                          items: CategoryType
+                              .values // displays all values that make up the enum
+                              .map(
+                                (category) => DropdownMenuItem(
+                                  value: category,
+                                  child: Text(
+                                    category.name.toUpperCase(),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (value) {
+                            if (value == null) {
+                              return;
+                            }
 
-                    setState(() {
-                      _selectedCategory = value;
-                    });
+                            setState(() {
+                              _selectedCategory = value;
+                            });
 
-                    //print(value);
-                  }),
-            ],
-          ),
-          const SizedBox(height: 10),
-          ElevatedButton(
-              onPressed: _submitExpenseData,
-              child: const Text('SAVE DATA INPUT')),
-          const SizedBox(height: 10),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                //print("Editing Cancelled");
-              },
-              child: const Text("CANCEL"))
-        ]));
+                            //print(value);
+                          }),
+                      const SizedBox(
+                        width: 24,
+                      ),
+                      Expanded(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            _selectedDate == null
+                                ? 'Select Date'
+                                : formatter.format(_selectedDate!),
+                          ),
+                          IconButton(
+                              onPressed: _presentDatePicker,
+                              iconSize: 40,
+                              icon: const Icon(Icons.calendar_month_sharp))
+                        ],
+                      )),
+                    ],
+                  )
+                else
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _amountController,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                              prefixText: 'KES ', label: Text("Amount")),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            _selectedDate == null
+                                ? 'Select Date'
+                                : formatter.format(_selectedDate!),
+                          ),
+                          IconButton(
+                              onPressed: _presentDatePicker,
+                              iconSize: 40,
+                              icon: const Icon(Icons.calendar_month_sharp))
+                        ],
+                      )),
+                    ],
+                  ),
+                const SizedBox(
+                  height: 50,
+                ),
+                if (width > 600)
+                  const Row(
+                    children: [
+                      // ElevatedButton(
+                      //     onPressed: _submitExpenseData,
+                      //     child: const Text('SAVE DATA INPUT')),
+                      // const SizedBox(height: 10),
+                      // ElevatedButton(
+                      //     onPressed: () {
+                      //       Navigator.pop(context);
+                      //       //print("Editing Cancelled");
+                      //     },
+                      //     child: const Text("CANCEL"))
+                    ],
+                  )
+                else
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      DropdownButton(
+                          value: _selectedCategory,
+                          items: CategoryType
+                              .values // displays all values that make up the enum
+                              .map(
+                                (category) => DropdownMenuItem(
+                                  value: category,
+                                  child: Text(
+                                    category.name.toUpperCase(),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (value) {
+                            if (value == null) {
+                              return;
+                            }
+
+                            setState(() {
+                              _selectedCategory = value;
+                            });
+
+                            //print(value);
+                          }),
+                    ],
+                  ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                    onPressed: _submitExpenseData,
+                    child: const Text('SAVE DATA INPUT')),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      //print("Editing Cancelled");
+                    },
+                    child: const Text("CANCEL"))
+              ])),
+        ),
+      );
+    });
   }
 }
